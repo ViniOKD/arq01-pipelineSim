@@ -19,88 +19,126 @@ def buscaInstrucao():
     return "-"
 
 def decodificaInstrucao(instrucao):
-    return instrucao.replace(",", "").split()
+    if instrucao == "-":
+        return instrucao
+    else:
+        return instrucao.replace(",", " ").split()
 
 def executaOperacao(instrucao):
+    if instrucao == "-":
+        return instrucao
+    
+    operacao = instrucao[0]
 
-    operacao,rd,rs,rt = instrucao[0], instrucao[1], instrucao[2], instrucao[3], 
-
-    if operacao == "add": 
+    if operacao == "add":
+        rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
         rd, rs, rt = int(rd[1:]), int(rs[1:]), int(rt[1:]) 
-        return(rd, cpu["registradores"][rs] + cpu["registradores"][rt])
+        return("add", rd, cpu["registradores"][rs] + cpu["registradores"][rt])
     
     elif operacao == "addi":
+        rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
         rd, rs = int(rd[1:]), int(rs[1:])
-        return(rd, cpu["registradores"][rs] + int(rt))
+        return("addi", rd, cpu["registradores"][rs] + int(rt))
         
     elif operacao == "sub":
+        rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
         rd, rs, rt = int(rd[1:]), int(rs[1:]), int(rt[1:]) 
-        return( rd, cpu["registradores"][rs] - cpu["registradores"][rt])
+        return("sub", rd, cpu["registradores"][rs] - cpu["registradores"][rt])
         
     elif operacao == "subi":
+        rd,rs =  instrucao[1], instrucao[2]
         rd, rs = int(rd[1:]), int(rs[1:])
-        return( rd, cpu["registradores"][rs] - int(rt))
+        return("subi", rd, cpu["registradores"][rs] - int(rt))
 
     elif operacao == "mul":
+        rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
         rd, rs, rt = int(rd[1:]), int(rs[1:]), int(rt[1:])
         #self.__registradores[rd] = self.__registradores[rs] * self.__registradores[rt]
-        return( rd, cpu["registradores"][rs] * cpu["registradores"][rt])
+        return("mul", rd, cpu["registradores"][rs] * cpu["registradores"][rt])
 
     elif operacao == "div":
+        rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
         rd, rs, rt = int(rd[1:]), int(rs[1:]), int(rt[1:])
-        return( rd, cpu["registradores"][rs] // cpu["registradores"][rt])
+        return("div", rd, cpu["registradores"][rs] // cpu["registradores"][rt])
 
     elif operacao == "mod":
+        rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
         rd, rs, rt = int(rd[1:]), int(rs[1:]), int(rt[1:])
-        return( rd, cpu["registradores"][rs] % cpu["registradores"][rt])
+        return("mod", rd, cpu["registradores"][rs] % cpu["registradores"][rt])
 
     # Desvios
     elif operacao == "blt":
+        rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
         rd, rs, imm = int(rd[1:]), int(rs[1:]), int(rt)
         if rd < rs:
             cpu["pc"] += imm
 
     elif operacao == "bgt":
+        rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
         rd, rs, imm = int(rd[1:]), int(rs[1:]), int(rt)
         if rd > rs:
             cpu["pc"] += imm
 
     elif operacao == "beq":
+        rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
         rd, rs, imm = int(rd[1:]), int(rs[1:]), int(rt)
         if rd == rs:
             cpu["pc"] += imm
 
     elif operacao == "j":
-        imm = int(rt)
+        imm = int(instrucao[1])
         cpu["pc"] += imm
 
     # Memoria
     elif operacao == "lw":
-        pass
+        rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
+        rd, rs, imm = int(rd[1:]), int(rs[1:]), int(rt)
+        return("lw", rd, rs+imm)
 
     elif operacao == "sw":
-        pass
+        rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
+        rd, rs, imm = int(rd[1:]), int(rs[1:]), int(rt)
+        return("lw", rd, rs+imm)
     
     # Movimentacao
     elif operacao == "mov":
-        pass
+        rd,rs =  instrucao[1], instrucao[2]
+        rd, rs = int(rd[1:]), int(rs[1:])
+        return ("mov", rd, cpu["registradores"][rs])
 
     elif operacao == "movi":
-        pass
+        rd, imm =  int((instrucao[1])[1:]), int(instrucao[2])
+        
+        return("movi", rd, imm)
 
     else:
         raise ValueError("operacao invalida")
-    pass
 
 def acessaMem(resultado):
-    print("???")
-    return resultado
+    if resultado == "-":
+        return resultado
 
+    op, rd, imm = resultado
+    if op != "lw" or "sw":
+        return resultado
+    
+    if op == "lw":
+        valor = cpu["memoria_instrucoes"][imm]
+        cpu["registradores"][rd] = valor
+
+    elif op == "sw":
+        cpu["registradores"][imm] = rd
+    else:
+        raise ValueError("mem")
 
 def escreveReg(resultado):
-    if resultado == "-":
+    
+    if resultado == "-" :
         return
-    rd, result = resultado
+    op, rd, result = resultado
+    if op == "lw" or op == "sw":
+        return
+
     cpu["registradores"][rd] = result
 
 
@@ -116,18 +154,24 @@ def avancar_pipeline():
 
 
 def initialise():
-    with open("instrucoes.txt", "rt") as arq:
-        return [linha.replace(",", "").split() for linha in arq]
+    with open("add_mov.txt", "rt") as arq:
+        return [linha.strip() for linha in arq]
 
 def main() -> None:
     global instrucoes
     instrucoes = initialise()
     ciclo = 0
-    while (estado != "-" for estado in pipeline) or (cpu["pc"] < len(instrucoes)):
+    while any(estado != "-" for estado in pipeline) or (cpu["pc"] < len(instrucoes)):
         print(f" Ciclo {ciclo}")
         avancar_pipeline()
+        print(pipeline)
         ciclo += 1
 
+    print("\n--- Registradores ---")
+    for i, val in enumerate(cpu["registradores"]):
+        if val != 0:
+            print(f"r{i} = {val}")
+            
 if __name__ == "__main__":
     main()
     
