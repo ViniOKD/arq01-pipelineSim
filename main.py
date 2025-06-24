@@ -1,6 +1,6 @@
 import os
 import io
-#
+#IF ID EX MEM WB
 # BUSCA -> DECOD -> EXEC -> ACESSO -> ESCRITA
 #
 cpu = {
@@ -142,15 +142,53 @@ def escreveReg(resultado):
     cpu["registradores"][rd] = result
 
 
-# Ta zoado isso aqui.
+def getDestino(instrucao):
+    ## Ela só pega o registrador o qual sera aplicado tal operacao.
+    if instrucao != "-":
+        return instrucao[1]
+
+def getFonte(instrucao):
+    if instrucao == "-":
+        return []
+    operacao = instrucao[0]
+    ## Devido a diferenca de tamanho de argumentos precisa rolar esses ifs aqui, essa funcao vai retornar os registradores "fonte" de valores,
+    ## Ai comparando com a funcao de cima getDestino ele verifica se algum registrador que sera utilizado na primeira operacao sera utilizado novamente
+    ## Se for utilizado novamente implementa o stall
+    if operacao in ["add", "sub", "mul", "div", "mod"]:
+        return [int(instrucao[2][1:]), int(instrucao[3][1:])]
+    elif operacao in ["addi", "subi"]:
+        return [int(instrucao[2][1:])]
+    elif operacao == "lw":
+        return [int(instrucao[2][1:])]  
+    elif operacao == "sw":
+        return [int(instrucao[1][1:]), int(instrucao[3][1:])]
+    elif operacao == "mov":
+        return [int(instrucao[2][1:])]
+    elif operacao in ["beq","blt","bgt"]:
+        return [int(instrucao[1][1:]), int(instrucao[2][1:])]
+    else:
+        return []
+
+
+def hazard():
+    fonte = getFonte(pipeline[1]) # ID
+    destinos = [getDestino(pipeline[2]), getDestino(pipeline[3]), getDestino(pipeline[4])] # EX MEM WB
+    return any(reg in destinos for reg in fonte if reg is not None) # retorna qualquer registro do destinos se o mesmo aparecer na fonte
+
+
+
 def avancar_pipeline():
     escreveReg(pipeline[4])
     pipeline[4] = pipeline[3] 
     pipeline[3] = acessaMem(pipeline[2])
-
-    pipeline[2] = executaOperacao(pipeline[1])
-    pipeline[1] = decodificaInstrucao(pipeline[0])
-    pipeline[0] = buscaInstrucao()
+    if hazard():
+        print("hazard - stall implementado")
+        pipeline[2] = '-'
+        return
+    else:
+        pipeline[2] = executaOperacao(pipeline[1])
+        pipeline[1] = decodificaInstrucao(pipeline[0])
+        pipeline[0] = buscaInstrucao()
 
 
 def initialise():
