@@ -1,15 +1,32 @@
 import os
 import io
+import sys
+
+if len(sys.argv) != 2:
+    print("Uso: python main.py <arquivo>")
+    sys.exit(1)
+
+arquivo = sys.argv[1]
+
+
 #IF ID EX MEM WB
 # BUSCA -> DECOD -> EXEC -> ACESSO -> ESCRITA
 #
 cpu = {
     "registradores": [0] * 32,
-    "memoria_instrucoes" : [0] * 64,
+    "memoria" : [0] * 64,
     "pc" : 0,
 }
 pipeline = ["-"] * 5
 
+
+operacoes = {
+    "add": lambda x, y: x + y,
+    "sub": lambda x, y: x - y,
+    "mul": lambda x, y: x * y,
+    "div": lambda x, y: x // y,
+    "mod": lambda x, y: x % y,
+}
 
 def buscaInstrucao():
     if cpu["pc"] < len(instrucoes):
@@ -22,7 +39,14 @@ def decodificaInstrucao(instrucao):
     if instrucao == "-":
         return instrucao
     else:
-        return instrucao.replace(",", " ").split()
+        instrucao = instrucao.replace(",", " ").split()
+        if instrucao[0] == "lw" or instrucao[0] == "sw":
+            # Remove os parenteses e separa o valor imediato e o registrador
+            offset_reg = instrucao[2].replace('(', ' ').replace(')', '').split() # coloca um espaco no lugar do "(" e remove o ')'
+            instrucao[2] = offset_reg[0]  # offset
+            instrucao.insert(3, offset_reg[1])  # register
+            print(instrucao)
+        return instrucao
 
 def executaOperacao(instrucao):
     if instrucao == "-":
@@ -33,7 +57,7 @@ def executaOperacao(instrucao):
     if operacao == "add":
         rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
         rd, rs, rt = int(rd[1:]), int(rs[1:]), int(rt[1:]) 
-        return("add", rd, cpu["registradores"][rs] + cpu["registradores"][rt])
+        return("add", rd, operacoes["add"](cpu["registradores"][rs], cpu["registradores"][rt]))
     
     elif operacao == "addi":
         rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
@@ -43,7 +67,7 @@ def executaOperacao(instrucao):
     elif operacao == "sub":
         rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
         rd, rs, rt = int(rd[1:]), int(rs[1:]), int(rt[1:]) 
-        return("sub", rd, cpu["registradores"][rs] - cpu["registradores"][rt])
+        return("sub", rd, operacoes["sub"](cpu["registradores"][rs], cpu["registradores"][rt]))
         
     elif operacao == "subi":
         rd,rs =  instrucao[1], instrucao[2]
@@ -54,17 +78,17 @@ def executaOperacao(instrucao):
         rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
         rd, rs, rt = int(rd[1:]), int(rs[1:]), int(rt[1:])
         #self.__registradores[rd] = self.__registradores[rs] * self.__registradores[rt]
-        return("mul", rd, cpu["registradores"][rs] * cpu["registradores"][rt])
+        return("mul", rd, operacoes["mul"](cpu["registradores"][rs], cpu["registradores"][rt]))
 
     elif operacao == "div":
         rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
         rd, rs, rt = int(rd[1:]), int(rs[1:]), int(rt[1:])
-        return("div", rd, cpu["registradores"][rs] // cpu["registradores"][rt])
+        return("div", rd, operacoes["div"](cpu["registradores"][rs], cpu["registradores"][rt]))
 
     elif operacao == "mod":
         rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
         rd, rs, rt = int(rd[1:]), int(rs[1:]), int(rt[1:])
-        return("mod", rd, cpu["registradores"][rs] % cpu["registradores"][rt])
+        return("mod", rd, operacoes["mod"](cpu["registradores"][rs], cpu["registradores"][rt]))
 
     # Desvios
     elif operacao == "blt":
@@ -92,12 +116,12 @@ def executaOperacao(instrucao):
     # Memoria
     elif operacao == "lw":
         rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
-        rd, rs, imm = int(rd[1:]), int(rs[1:]), int(rt)
+        rd, rs, imm = int(rd[1:]), int(rs), int(rt[1:])
         return("lw", rd, rs+imm)
 
     elif operacao == "sw":
         rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
-        rd, rs, imm = int(rd[1:]), int(rs[1:]), int(rt)
+        rd, rs, imm = int(rd[1:]), int(rs), int(rt[1:])
         return("lw", rd, rs+imm)
     
     # Movimentacao
@@ -123,7 +147,7 @@ def acessaMem(resultado):
         return resultado
     
     if op == "lw":
-        valor = cpu["memoria_instrucoes"][imm]
+        valor = cpu["memoria"][imm]
         cpu["registradores"][rd] = valor
 
     elif op == "sw":
@@ -154,17 +178,17 @@ def getFonte(instrucao):
     ## Devido a diferenca de tamanho de argumentos precisa rolar esses ifs aqui, essa funcao vai retornar os registradores "fonte" de valores,
     ## Ai comparando com a funcao de cima getDestino ele verifica se algum registrador que sera utilizado na primeira operacao sera utilizado novamente
     ## Se for utilizado novamente implementa o stall
-    if operacao in ["add", "sub", "mul", "div", "mod"]:
+    if operacao in operacoes:
         return [int(instrucao[2][1:]), int(instrucao[3][1:])]
     elif operacao in ["addi", "subi"]:
         return [int(instrucao[2][1:])]
     elif operacao == "lw":
-        return [int(instrucao[2][1:])]  
+        return [int(instrucao[2])]  
     elif operacao == "sw":
         return [int(instrucao[1][1:]), int(instrucao[3][1:])]
     elif operacao == "mov":
         return [int(instrucao[2][1:])]
-    elif operacao in ["beq","blt","bgt"]:
+    elif operacao in ["beq","blt","bgt","j"]:
         return [int(instrucao[1][1:]), int(instrucao[2][1:])]
     else:
         return []
@@ -192,17 +216,25 @@ def avancar_pipeline():
 
 
 def initialise():
-    with open("add_mov.txt", "rt") as arq:
+    with open(arquivo, "rt") as arq:
         return [linha.strip() for linha in arq]
 
 def main() -> None:
     global instrucoes
     instrucoes = initialise()
     ciclo = 0
+    # Enquanto houver instrucoes no pipeline ou o pc for menor que o tamanho das instrucoes
+    # O any é para verificar se algum estado do pipeline é diferente de "-"
+    # se fizesse só com or teria que fazer comparacoes para cada estado do pipeline
     while any(estado != "-" for estado in pipeline) or (cpu["pc"] < len(instrucoes)):
         print(f" Ciclo {ciclo}")
         avancar_pipeline()
-        print(pipeline)
+        #print(pipeline)
+        print("|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|")
+        print(f"|{pipeline[0]:^15}||{(', ').join(pipeline[1]):^15}||{' '.join(map(str, pipeline[2])):^15}||{' '.join(map(str, pipeline[3])):^15}||{' '.join(map(str, pipeline[4])):^15}|")
+        # Esses :^15 sao para alinhar os valores no terminal, 15 é o tamanho do alinhamento
+        # o map(str, pipeline[2]) é para converter os valores da lista em strings
+        # o join é para juntar os valores em uma string
         ciclo += 1
 
     print("\n--- Registradores ---")
