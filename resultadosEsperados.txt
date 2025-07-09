@@ -1,0 +1,9 @@
+r1 = 5
+r6 = 144
+r7 = 7
+r9 = 149
+r13 = 157
+r15 = 150
+
+resultados esperados do arquivo add_mov.txt 
+PODE ESTAR ERRADO 
