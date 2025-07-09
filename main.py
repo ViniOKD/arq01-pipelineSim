@@ -14,7 +14,7 @@ arquivo = sys.argv[1]
 #
 cpu = {
     "registradores": [0] * 32,
-    "memoria" : [0] * 64,
+    "memoria" : [0] * 128,
     "pc" : 0,
     "instrucoes" : []
 }
@@ -51,14 +51,15 @@ def decodificaInstrucao(instrucao):
 
 
 def executaOperacao(instrucao):
+    
     if instrucao == "-":
         return instrucao
-    
+    # O retorno dessa funcao é uma tupla com a operacao e os argumentos no formato (operacao, destino, fonte1, fonte2)
     operacao = instrucao[0]
 
     if operacao == "add":
-        rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
-        rd, rs, rt = int(rd[1:]), int(rs[1:]), int(rt[1:]) 
+        rd,rs,rt =  int(instrucao[1][1:]), int(instrucao[2][1:]), int(instrucao[3][1:]) # remove os r dos registradores e transforma em int
+        #rd, rs, rt = int(rd[1:]), int(rs[1:]), int(rt[1:]) 
         return("add", rd, operacoes["add"](cpu["registradores"][rs], cpu["registradores"][rt]))
     
     elif operacao == "addi":
@@ -66,8 +67,8 @@ def executaOperacao(instrucao):
         return("addi", rd, cpu["registradores"][rs] + rt)
         
     elif operacao == "sub":
-        rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
-        rd, rs, rt = int(rd[1:]), int(rs[1:]), int(rt[1:]) 
+        rd,rs,rt =  int(instrucao[1][1:]), int(instrucao[2][1:]), int(instrucao[3][1:]) # remove os r dos registradores e transforma em int
+        #rd, rs, rt = int(rd[1:]), int(rs[1:]), int(rt[1:]) 
         return("sub", rd, operacoes["sub"](cpu["registradores"][rs], cpu["registradores"][rt]))
         
     elif operacao == "subi":
@@ -114,14 +115,14 @@ def executaOperacao(instrucao):
 
     # Memoria
     elif operacao == "lw":
-        rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
-        rd, rs, imm = int(rd[1:]), int(rs), int(rt[1:])
+        rd,imm,rs =  int(instrucao[1][1:]), int(instrucao[2]), int(instrucao[3][1:])
+        rs = cpu["registradores"][rs]
         return("lw", rd, rs+imm)
 
     elif operacao == "sw":
-        rd,rs,rt =  instrucao[1], instrucao[2], instrucao[3]
-        rd, rs, imm = int(rd[1:]), int(rs), int(rt[1:])
-        return("lw", rd, rs+imm)
+        rd,imm,rs =  int(instrucao[1][1:]), int(instrucao[2]), int(instrucao[3][1:])
+        rs = cpu["registradores"][rs]
+        return("sw", rd, rs+imm)
     
     # Movimentacao
     elif operacao == "mov":
@@ -142,15 +143,17 @@ def acessaMem(resultado):
         return resultado
 
     op = resultado[0]
-    if op != "lw" or "sw":
+    if op != "lw" and op != "sw":
         return resultado
     
     if op == "lw":
-        valor = cpu["memoria"][resultado[2]]
-        cpu["registradores"][resultado[1]] = valor
+        cpu["registradores"][resultado[1]] = cpu["memoria"][resultado[2]]
+        return resultado
 
     elif op == "sw":
-        cpu["memoria"][resultado[2]] = resultado[1]
+        print(resultado)
+        cpu["memoria"][resultado[2]] = cpu["registradores"][resultado[1]]
+        return resultado
     else:
         raise ValueError("mem")
 
@@ -232,7 +235,8 @@ def main() -> None:
         print("|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|")
         print(f"|{pipeline[0]:^15}||{(', ').join(pipeline[1]):^15}||{', '.join(map(str, pipeline[2])):^15}||{', '.join(map(str, pipeline[3])):^15}||{', '.join(map(str, pipeline[4])):^15}|")
         print(f"PC: {cpu['pc']}")
-        print(f"Registradores: {cpu['registradores']}")
+        print(f"Registradores: {cpu['registradores']}") # ta aqui pra teste
+
        
         # Esses :^15 sao para alinhar os valores no terminal, 15 é o tamanho do alinhamento
         # o map(str, pipeline[2]) é para converter os valores da lista em strings
@@ -243,7 +247,13 @@ def main() -> None:
     for i, val in enumerate(cpu["registradores"]):
         if val != 0:
             print(f"r{i} = {val}")
-            
+    
+    print("\n--- Memoria ---")
+    for i, val in enumerate(cpu["memoria"]):
+        if val != 0:
+            print(f"mem[{i}] = {val}") # ta aqui pra teste
+    print(cpu["memoria"])
+
 if __name__ == "__main__":
     main()
     
