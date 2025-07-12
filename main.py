@@ -8,7 +8,7 @@ if len(sys.argv) != 2:
 
 arquivo = sys.argv[1]
 
-
+# teste
 #IF ID EX MEM WB
 # BUSCA -> DECOD -> EXEC -> ACESSO -> ESCRITA
 #
@@ -91,26 +91,43 @@ def executaOperacao(instrucao):
     elif operacao == "blt":
         rd,rs,imm =  int(instrucao[1][1:]), int(instrucao[2][1:]), int(instrucao[3])
         if cpu["registradores"][rd] < cpu["registradores"][rs]:
+            print("desvio tomado")
             cpu["pc"] += imm
-
+            pipeline[0] = "-"
+            pipeline[1] = "-"
+        else:
+            print("desvio nao tomado")
         return("blt", rd, rs, imm)
 
     elif operacao == "bgt":
         rd,rs,imm =  int(instrucao[1][1:]), int(instrucao[2][1:]), int(instrucao[3])
         if cpu["registradores"][rd] > cpu["registradores"][rs]:
+            print("desvio tomado")
             cpu["pc"] += imm
+            pipeline[0] = "-"
+            pipeline[1] = "-"
+        else:
+            print("desvio nao tomado")
 
         return("bgt", rd, rs, imm)
 
     elif operacao == "beq":
         rd,rs,imm =  int(instrucao[1][1:]), int(instrucao[2][1:]), int(instrucao[3])
         if cpu["registradores"][rd] == cpu["registradores"][rs]:
+            print("desvio tomado")
             cpu["pc"] += imm
+            pipeline[0] = "-"
+            pipeline[1] = "-"
+        else:
+            print("desvio nao tomado")
         return("beq", rd, rs, imm)
 
     elif operacao == "j":
         imm = int(instrucao[1])
         cpu["pc"] += imm
+        pipeline[0] = "-"
+        pipeline[1] = "-"
+        print("desvio incondicional tomado")
         return("j", imm)
 
     # Memoria
