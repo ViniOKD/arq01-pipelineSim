@@ -17,7 +17,9 @@ cpu = {
     "pc" : 0,
     "instrucoes" : []
 }
-pipeline = ["-"] * 5
+# Inicia a pipeline como uma lista de tuplas: (instrucao_original, valor_atual)
+# instrucao_original: str, valor_atual: pode ser str, tupla, ou qualquer tipo dependendo do estagio
+pipeline = [("-", "-") for _ in range(5)]
 
 
 operacoes = {
@@ -32,8 +34,8 @@ def buscaInstrucao():
     if cpu["pc"] < len(cpu["instrucoes"]):
         atual = cpu["instrucoes"][cpu["pc"]]
         cpu["pc"] += 1
-        return atual
-    return "-"
+        return (atual, atual)
+    return ("-", "-")
 
 def decodificaInstrucao(instrucao):
     if instrucao == "-":
@@ -58,7 +60,6 @@ def executaOperacao(instrucao):
 
     if operacao == "add":
         rd,rs,rt =  int(instrucao[1][1:]), int(instrucao[2][1:]), int(instrucao[3][1:]) # remove os r dos registradores e transforma em int
-        #rd, rs, rt = int(rd[1:]), int(rs[1:]), int(rt[1:]) 
         return("add", rd, operacoes["add"](cpu["registradores"][rs], cpu["registradores"][rt]))
     
     elif operacao == "addi":
@@ -67,7 +68,6 @@ def executaOperacao(instrucao):
         
     elif operacao == "sub":
         rd,rs,rt =  int(instrucao[1][1:]), int(instrucao[2][1:]), int(instrucao[3][1:]) # remove os r dos registradores e transforma em int
-        #rd, rs, rt = int(rd[1:]), int(rs[1:]), int(rt[1:]) 
         return("sub", rd, operacoes["sub"](cpu["registradores"][rs], cpu["registradores"][rt]))
         
     elif operacao == "subi":
@@ -92,8 +92,8 @@ def executaOperacao(instrucao):
         if cpu["registradores"][rd] < cpu["registradores"][rs]:
             print("desvio tomado")
             cpu["pc"] = imm
-            pipeline[0] = "-"
-            pipeline[1] = "-"
+            pipeline[0] = ("-", "-")
+            pipeline[1] = ("-", "-")
         else:
             print("desvio nao tomado")
         return("blt", rd, rs, imm)
@@ -103,8 +103,8 @@ def executaOperacao(instrucao):
         if cpu["registradores"][rd] > cpu["registradores"][rs]:
             print("desvio tomado")
             cpu["pc"] = imm
-            pipeline[0] = "-"
-            pipeline[1] = "-"
+            pipeline[0] = ("-", "-")
+            pipeline[1] = ("-", "-")
         else:
             print("desvio nao tomado")
 
@@ -115,8 +115,8 @@ def executaOperacao(instrucao):
         if cpu["registradores"][rd] == cpu["registradores"][rs]:
             print("desvio tomado")
             cpu["pc"] = imm
-            pipeline[0] = "-"
-            pipeline[1] = "-"
+            pipeline[0] = ("-", "-")
+            pipeline[1] = ("-", "-")
         else:
             print("desvio nao tomado")
         return("beq", rd, rs, imm)
@@ -124,8 +124,8 @@ def executaOperacao(instrucao):
     elif operacao == "j":
         imm = int(instrucao[1])
         cpu["pc"] = imm
-        pipeline[0] = "-"
-        pipeline[1] = "-"
+        pipeline[0] = ("-", "-")
+        pipeline[1] = ("-", "-")
         print("desvio incondicional tomado")
         return("j", imm)
 
@@ -213,29 +213,35 @@ def getFonte(instrucao):
 
 
 def hazard():
-    fonte = getFonte(pipeline[1]) # ID
-    destinos = [getDestino(pipeline[2]), getDestino(pipeline[3]), getDestino(pipeline[4])] # EX MEM WB
+    fonte = getFonte(pipeline[1][1]) # ID
+    destinos = [getDestino(pipeline[2][1]), getDestino(pipeline[3][1]), getDestino(pipeline[4][1])] # EX MEM WB
     return any(reg in destinos for reg in fonte if reg is not None) # retorna qualquer registro do destinos se o mesmo aparecer na fonte
 
 
 
 def avancar_pipeline():
-    escreveReg(pipeline[4])
-    pipeline[4] = pipeline[3] 
-    pipeline[3] = acessaMem(pipeline[2])
+    escreveReg(pipeline[4][1])
+    pipeline[4] = pipeline[3]
+    pipeline[3] = (pipeline[2][0], acessaMem(pipeline[2][1]))
     if hazard():
         print("hazard - stall implementado")
-        pipeline[2] = '-'
+        pipeline[2] = ("-", "-")
         return
     else:
-        pipeline[2] = executaOperacao(pipeline[1])
-        pipeline[1] = decodificaInstrucao(pipeline[0])
+        pipeline[2] = (pipeline[1][0], executaOperacao(pipeline[1][1]))
+        pipeline[1] = (pipeline[0][0], decodificaInstrucao(pipeline[0][1]))
         pipeline[0] = buscaInstrucao()
 
 
 def initialise():
     with open(arquivo, "rt") as arq:
         return [linha.strip() for linha in arq]
+
+def imprime_pipeline(pipeline):
+    cabecalho = ["Busca", "Decodifica", "Executa", "Memoria", "Regist"]
+    print("|" + "|".join(f"{x:^15}" for x in cabecalho) + "|")
+    print("|" + "|".join(f"{estagio[0]:^15}" for estagio in pipeline) + "|")
+
 
 def main() -> None:
     cpu["instrucoes"] = initialise()
@@ -244,14 +250,13 @@ def main() -> None:
     # Enquanto houver instrucoes no pipeline ou o pc for menor que o tamanho das instrucoes
     # O any é para verificar se algum estado do pipeline é diferente de "-"
     # se fizesse só com or teria que fazer comparacoes para cada estado do pipeline
-    while any(estado != "-" for estado in pipeline) or (cpu["pc"] < len(cpu["instrucoes"])):
+    while any(estado[1] != "-" for estado in pipeline) or (cpu["pc"] < len(cpu["instrucoes"])):
         print(f" Ciclo {ciclo}")
         avancar_pipeline()
-       # print(pipeline)
-        print("|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|")
-        print(f"|{pipeline[0]:^15}||{(', ').join(pipeline[1]):^15}||{', '.join(map(str, pipeline[2])):^15}||{', '.join(map(str, pipeline[3])):^15}||{', '.join(map(str, pipeline[4])):^15}|")
+        #print(pipeline)
+        imprime_pipeline(pipeline)
         print(f"PC: {cpu['pc']}")
-        print(f"Registradores: {cpu['registradores']}") # ta aqui pra teste
+
 
        
         # Esses :^15 sao para alinhar os valores no terminal, 15 é o tamanho do alinhamento
@@ -267,7 +272,7 @@ def main() -> None:
     print("\n--- Memoria ---")
     for i, val in enumerate(cpu["memoria"]):
         if val != 0:
-            print(f"mem[{i}] = {val}") # ta aqui pra teste
+            print(f"mem[{i}] = {val}") 
     
 
 if __name__ == "__main__":
