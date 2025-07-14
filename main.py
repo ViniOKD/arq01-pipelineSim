@@ -8,13 +8,12 @@ if len(sys.argv) != 2:
 
 arquivo = sys.argv[1]
 
-# teste
-#IF ID EX MEM WB
-# BUSCA -> DECOD -> EXEC -> ACESSO -> ESCRITA
-#
+config_file = open("config.txt", "r")
+memoria = int(config_file.read())
+
 cpu = {
     "registradores": [0] * 32,
-    "memoria" : [0] * 128,
+    "memoria" : [0] * memoria,
     "pc" : 0,
     "instrucoes" : []
 }
@@ -92,7 +91,7 @@ def executaOperacao(instrucao):
         rd,rs,imm =  int(instrucao[1][1:]), int(instrucao[2][1:]), int(instrucao[3])
         if cpu["registradores"][rd] < cpu["registradores"][rs]:
             print("desvio tomado")
-            cpu["pc"] += imm
+            cpu["pc"] = imm
             pipeline[0] = "-"
             pipeline[1] = "-"
         else:
@@ -103,7 +102,7 @@ def executaOperacao(instrucao):
         rd,rs,imm =  int(instrucao[1][1:]), int(instrucao[2][1:]), int(instrucao[3])
         if cpu["registradores"][rd] > cpu["registradores"][rs]:
             print("desvio tomado")
-            cpu["pc"] += imm
+            cpu["pc"] = imm
             pipeline[0] = "-"
             pipeline[1] = "-"
         else:
@@ -115,7 +114,7 @@ def executaOperacao(instrucao):
         rd,rs,imm =  int(instrucao[1][1:]), int(instrucao[2][1:]), int(instrucao[3])
         if cpu["registradores"][rd] == cpu["registradores"][rs]:
             print("desvio tomado")
-            cpu["pc"] += imm
+            cpu["pc"] = imm
             pipeline[0] = "-"
             pipeline[1] = "-"
         else:
@@ -124,7 +123,7 @@ def executaOperacao(instrucao):
 
     elif operacao == "j":
         imm = int(instrucao[1])
-        cpu["pc"] += imm
+        cpu["pc"] = imm
         pipeline[0] = "-"
         pipeline[1] = "-"
         print("desvio incondicional tomado")
@@ -164,8 +163,7 @@ def acessaMem(resultado):
         return resultado
     
     if op == "lw":
-        cpu["registradores"][resultado[1]] = cpu["memoria"][resultado[2]]
-        return resultado
+        return ("lw", resultado[1], cpu['memoria'][resultado[2]])
 
     elif op == "sw":
         print(resultado)
@@ -177,12 +175,13 @@ def acessaMem(resultado):
 def escreveReg(resultado):
     
     if resultado == "-" :
-        return
+        return resultado
     op = resultado[0]
-    if op == "lw" or op == "sw":
-        return
+    if op == "sw" or op == "blt" or op == "bgt" or op == "beq" or op == "j":
+        return resultado
 
     cpu["registradores"][resultado[1]] = resultado[2]
+    return resultado
 
 
 def getDestino(instrucao):
@@ -202,7 +201,7 @@ def getFonte(instrucao):
     elif operacao in ["addi", "subi"]:
         return [int(instrucao[2][1:])]
     elif operacao == "lw":
-        return [int(instrucao[2])]  
+        return [int(instrucao[1][1:]), int(instrucao[3][1:])]  
     elif operacao == "sw":
         return [int(instrucao[1][1:]), int(instrucao[3][1:])]
     elif operacao == "mov":
@@ -248,7 +247,7 @@ def main() -> None:
     while any(estado != "-" for estado in pipeline) or (cpu["pc"] < len(cpu["instrucoes"])):
         print(f" Ciclo {ciclo}")
         avancar_pipeline()
-        print(pipeline)
+       # print(pipeline)
         print("|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|")
         print(f"|{pipeline[0]:^15}||{(', ').join(pipeline[1]):^15}||{', '.join(map(str, pipeline[2])):^15}||{', '.join(map(str, pipeline[3])):^15}||{', '.join(map(str, pipeline[4])):^15}|")
         print(f"PC: {cpu['pc']}")
@@ -269,7 +268,7 @@ def main() -> None:
     for i, val in enumerate(cpu["memoria"]):
         if val != 0:
             print(f"mem[{i}] = {val}") # ta aqui pra teste
-    print(cpu["memoria"])
+    
 
 if __name__ == "__main__":
     main()
