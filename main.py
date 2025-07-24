@@ -50,7 +50,6 @@ def decodificaInstrucao(instrucao):
             print(instrucao)
         return tuple(instrucao)
 
-
 def executaOperacao(instrucao):
     
     if instrucao == "-":
@@ -183,7 +182,6 @@ def escreveReg(resultado):
     cpu["registradores"][resultado[1]] = resultado[2]
     return resultado
 
-
 def getDestino(instrucao):
     ## Ela só pega o registrador o qual sera aplicado tal operacao.
     if instrucao != "-":
@@ -198,28 +196,23 @@ def getFonte(instrucao):
     ## Se for utilizado novamente implementa o stall
     if operacao in operacoes:
         return [int(instrucao[2][1:]), int(instrucao[3][1:])]
-    elif operacao in ["addi", "subi"]:
+    elif operacao in ["addi", "subi", "mov"]:
         return [int(instrucao[2][1:])]
-    elif operacao == "lw":
+    elif operacao == "lw" or operacao == "sw":
         return [int(instrucao[1][1:]), int(instrucao[3][1:])]  
-    elif operacao == "sw":
-        return [int(instrucao[1][1:]), int(instrucao[3][1:])]
-    elif operacao == "mov":
-        return [int(instrucao[2][1:])]
     elif operacao in ["beq","blt","bgt","j"]:
         return [int(instrucao[1][1:]), int(instrucao[2][1:])]
+    elif operacao == "movi":
+        return [int(instrucao[1][1:])]
     else:
         return []
-
 
 def hazard():
     fonte = getFonte(pipeline[1][1]) # ID
     destinos = [getDestino(pipeline[2][1]), getDestino(pipeline[3][1]), getDestino(pipeline[4][1])] # EX MEM WB
     return any(reg in destinos for reg in fonte if reg is not None) # retorna qualquer registro do destinos se o mesmo aparecer na fonte
 
-
-
-def avancar_pipeline():
+def avancarPipeline():
     escreveReg(pipeline[4][1])
     pipeline[4] = pipeline[3]
     pipeline[3] = (pipeline[2][0], acessaMem(pipeline[2][1]))
@@ -232,16 +225,14 @@ def avancar_pipeline():
         pipeline[1] = (pipeline[0][0], decodificaInstrucao(pipeline[0][1]))
         pipeline[0] = buscaInstrucao()
 
-
 def initialise():
     with open(arquivo, "rt") as arq:
         return [linha.strip() for linha in arq]
 
-def imprime_pipeline(pipeline):
+def imprimePipeline(pipeline):
     cabecalho = ["Busca", "Decodifica", "Executa", "Memoria", "Regist"]
     print("|" + "|".join(f"{x:^15}" for x in cabecalho) + "|")
     print("|" + "|".join(f"{estagio[0]:^15}" for estagio in pipeline) + "|")
-
 
 def main() -> None:
     cpu["instrucoes"] = initialise()
@@ -252,9 +243,9 @@ def main() -> None:
     # se fizesse só com or teria que fazer comparacoes para cada estado do pipeline
     while any(estado[1] != "-" for estado in pipeline) or (cpu["pc"] < len(cpu["instrucoes"])):
         print(f" Ciclo {ciclo}")
-        avancar_pipeline()
+        avancarPipeline()
         #print(pipeline)
-        imprime_pipeline(pipeline)
+        imprimePipeline(pipeline)
         print(f"PC: {cpu['pc']}")
 
 
@@ -274,7 +265,6 @@ def main() -> None:
         if val != 0:
             print(f"mem[{i}] = {val}") 
     
-
 if __name__ == "__main__":
     main()
     
