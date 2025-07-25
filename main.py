@@ -1,14 +1,22 @@
-import os
-import io
 import sys
 
+# O arquivo de configuração (config.txt) deve conter um único número inteiro representando o tamanho da memória
+# 
+# Verifica se o número de argumentos é correto
 if len(sys.argv) != 2:
     print("Uso: python main.py <arquivo>")
     sys.exit(1)
 
 arquivo = sys.argv[1]
+if not arquivo.endswith(".txt"):
+    raise ValueError("O arquivo deve ter a extensão .txt")
 
-config_file = open("config.txt", "r")
+# Verifica se o arquivo de configuração existe e lê o tamanho da memória
+try:
+    config_file = open("config.txt", "r")
+except FileNotFoundError:
+    raise FileNotFoundError("Arquivo de configuração 'config.txt' não encontrado.")
+
 memoria = int(config_file.read())
 
 cpu = {
@@ -17,11 +25,12 @@ cpu = {
     "pc" : 0,
     "instrucoes" : []
 }
+
 # Inicia a pipeline como uma lista de tuplas: (instrucao_original, valor_atual)
 # instrucao_original: str, valor_atual: pode ser str, tupla, ou qualquer tipo dependendo do estagio
 pipeline = [("-", "-") for _ in range(5)]
 
-
+# Dicionário de operações
 operacoes = {
     "add": lambda x, y: x + y,
     "sub": lambda x, y: x - y,
@@ -31,6 +40,8 @@ operacoes = {
 }
 
 def buscaInstrucao():
+    ''' Busca a próxima instrução a ser executada.
+    '''
     if cpu["pc"] < len(cpu["instrucoes"]):
         atual = cpu["instrucoes"][cpu["pc"]]
         cpu["pc"] += 1
@@ -38,6 +49,9 @@ def buscaInstrucao():
     return ("-", "-")
 
 def decodificaInstrucao(instrucao):
+    ''' Decodifica uma instrução em uma tupla.
+    Retorna uma tupla no formato (operacao, destino, fonte1, fonte2)
+    '''
     if instrucao == "-":
         return instrucao
     else:
@@ -51,39 +65,25 @@ def decodificaInstrucao(instrucao):
         return tuple(instrucao)
 
 def executaOperacao(instrucao):
+    ''' Executa a operação da instrução decodificada.
+    Retorna uma tupla com a operação e os resultados.
+    Formato: (operacao, destino, resultado)
+    '''
     
     if instrucao == "-":
         return instrucao
     # O retorno dessa funcao é uma tupla com a operacao e os argumentos no formato (operacao, destino, fonte1, fonte2)
     operacao = instrucao[0]
 
-    if operacao == "add":
+
+    if operacao in operacoes:
         rd,rs,rt =  int(instrucao[1][1:]), int(instrucao[2][1:]), int(instrucao[3][1:]) # remove os r dos registradores e transforma em int
-        return("add", rd, operacoes["add"](cpu["registradores"][rs], cpu["registradores"][rt]))
-    
-    elif operacao == "addi":
-        rd,rs,rt =  int(instrucao[1][1:]), int(instrucao[2][1:]), int(instrucao[3])
-        return("addi", rd, cpu["registradores"][rs] + rt)
-        
-    elif operacao == "sub":
-        rd,rs,rt =  int(instrucao[1][1:]), int(instrucao[2][1:]), int(instrucao[3][1:]) # remove os r dos registradores e transforma em int
-        return("sub", rd, operacoes["sub"](cpu["registradores"][rs], cpu["registradores"][rt]))
-        
-    elif operacao == "subi":
-        rd,rs,rt =  int(instrucao[1][1:]), int(instrucao[2][1:]), int(instrucao[3])
-        return("subi", rd, cpu["registradores"][rs] - rt)
+        return(operacao, rd, operacoes[operacao](cpu["registradores"][rs], cpu["registradores"][rt]))
 
-    elif operacao == "mul":
-        rd,rs,rt =  int(instrucao[1][1:]), int(instrucao[2][1:]), int(instrucao[3])
-        return("mul", rd, operacoes["mul"](cpu["registradores"][rs], cpu["registradores"][rt]))
-
-    elif operacao == "div":
-        rd,rs,rt =  int(instrucao[1][1:]), int(instrucao[2][1:]), int(instrucao[3])
-        return("div", rd, operacoes["div"](cpu["registradores"][rs], cpu["registradores"][rt]))
-
-    elif operacao == "mod":
-        rd,rs,rt =  int(instrucao[1][1:]), int(instrucao[2][1:]), int(instrucao[3])
-        return("mod", rd, operacoes["mod"](cpu["registradores"][rs], cpu["registradores"][rt]))
+    if operacao in ["addi", "subi"]:
+        rd, rs, imm = int(instrucao[1][1:]), int(instrucao[2][1:]), int(instrucao[3])
+        resultado = cpu["registradores"][rs] + imm if operacao == "addi" else cpu["registradores"][rs] - imm
+        return (operacao, rd, resultado)
 
     # Desvios
     elif operacao == "blt":
@@ -141,8 +141,7 @@ def executaOperacao(instrucao):
     
     # Movimentacao
     elif operacao == "mov":
-        rd,rs =  instrucao[1], instrucao[2]
-        rd, rs = int(rd[1:]), int(rs[1:])
+        rd,rs =  int(instrucao[1][1:]), int(instrucao[2][1:])
         return ("mov", rd, cpu["registradores"][rs])
 
     elif operacao == "movi":
@@ -151,9 +150,12 @@ def executaOperacao(instrucao):
         return("movi", rd, imm)
 
     else:
-        raise ValueError("operacao invalida")
+        raise ValueError("Há uma instrução inválida: " + operacao)
 
 def acessaMem(resultado):
+    '''
+    Acessa a memória para ler ou escrever valores.
+    '''
     if resultado == "-":
         return resultado
 
@@ -172,7 +174,9 @@ def acessaMem(resultado):
         raise ValueError("mem")
 
 def escreveReg(resultado):
-    
+    '''
+    Escreve o resultado de uma instrução no registrador correspondente.
+    '''
     if resultado == "-" :
         return resultado
     op = resultado[0]
@@ -183,31 +187,40 @@ def escreveReg(resultado):
     return resultado
 
 def getDestino(instrucao):
-    ## Ela só pega o registrador o qual sera aplicado tal operacao.
+    ''' Retorna o registrador destino de uma instrução.
+    '''
     if instrucao != "-":
         return instrucao[1]
 
 def getFonte(instrucao):
+    ''' Retorna os registradores fonte de uma instrução.
+    '''
+
     if instrucao == "-":
         return []
     operacao = instrucao[0]
-    ## Devido a diferenca de tamanho de argumentos precisa rolar esses ifs aqui, essa funcao vai retornar os registradores "fonte" de valores,
-    ## Ai comparando com a funcao de cima getDestino ele verifica se algum registrador que sera utilizado na primeira operacao sera utilizado novamente
-    ## Se for utilizado novamente implementa o stall
+    
     if operacao in operacoes:
         return [int(instrucao[2][1:]), int(instrucao[3][1:])]
-    elif operacao in ["addi", "subi", "mov"]:
+    elif operacao in ["addi", "subi"]:
         return [int(instrucao[2][1:])]
-    elif operacao == "lw" or operacao == "sw":
+    elif operacao == "lw":
         return [int(instrucao[1][1:]), int(instrucao[3][1:])]  
+    elif operacao == "sw":
+        return [int(instrucao[1][1:]), int(instrucao[3][1:])]
+    elif operacao == "mov":
+        return [int(instrucao[2][1:])]
     elif operacao in ["beq","blt","bgt","j"]:
         return [int(instrucao[1][1:]), int(instrucao[2][1:])]
-    elif operacao == "movi":
-        return [int(instrucao[1][1:])]
     else:
         return []
 
 def hazard():
+    ''' Verifica se há hazard de dados no pipeline.
+    A funcao getFonte retorna os registradores fonte de uma instrução.
+    A funcao getDestino retorna o registrador destino de uma instrução.
+    A funcao hazard verifica se algum dos registradores fonte da instrução atual (ID) está sendo escrito em um dos estágios seguintes (EX, MEM, WB).
+    '''
     fonte = getFonte(pipeline[1][1]) # ID
     destinos = [getDestino(pipeline[2][1]), getDestino(pipeline[3][1]), getDestino(pipeline[4][1])] # EX MEM WB
     return any(reg in destinos for reg in fonte if reg is not None) # retorna qualquer registro do destinos se o mesmo aparecer na fonte
@@ -236,15 +249,16 @@ def imprimePipeline(pipeline):
 
 def main() -> None:
     cpu["instrucoes"] = initialise()
-    print(cpu["instrucoes"])
     ciclo = 0
+    if not cpu["instrucoes"]:
+        raise ValueError("Nenhuma instrução encontrada no arquivo.")
     # Enquanto houver instrucoes no pipeline ou o pc for menor que o tamanho das instrucoes
     # O any é para verificar se algum estado do pipeline é diferente de "-"
     # se fizesse só com or teria que fazer comparacoes para cada estado do pipeline
     while any(estado[1] != "-" for estado in pipeline) or (cpu["pc"] < len(cpu["instrucoes"])):
         print(f" Ciclo {ciclo}")
         avancarPipeline()
-        #print(pipeline)
+
         imprimePipeline(pipeline)
         print(f"PC: {cpu['pc']}")
 
