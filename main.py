@@ -1,5 +1,3 @@
-import os
-import io
 import sys
 
 if len(sys.argv) != 2:
@@ -135,17 +133,21 @@ def executaOperacao(instrucao):
         return("lw", rd, rs+imm)
 
     elif operacao == "sw":
-        rd,imm,rs =  int(instrucao[1][1:]), int(instrucao[2]), int(instrucao[3][1:])
-        rs = cpu["registradores"][rs]
-        return("sw", rd, rs+imm)
+        # Armazena o valor de rs na memoria no endereco imm + rt
+        rs, imm, rt =  int(instrucao[1][1:]), int(instrucao[2]), int(instrucao[3][1:])
+        rt = cpu["registradores"][rt]
+        return("sw", rs, rt+imm)
     
     # Movimentacao
     elif operacao == "mov":
-        rd,rs =  instrucao[1], instrucao[2]
-        rd, rs = int(rd[1:]), int(rs[1:])
+        # Atribui o valor de rs ao registrador rd
+        # Exemplo: mov r1, r2 -> r1 = r2
+        rd, rs = int(instrucao[1][1:]), int(instrucao[2][1:])
         return ("mov", rd, cpu["registradores"][rs])
 
     elif operacao == "movi":
+        # Atribui o valor imediato ao registrador rd
+        # Exemplo: movi r1, 10 -> r1 = 10
         rd, imm =  int((instrucao[1])[1:]), int(instrucao[2])
         
         return("movi", rd, imm)
