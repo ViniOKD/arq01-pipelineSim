@@ -1,0 +1,541 @@
+0 rd:"1" rs:"None" rt:"None" imm:"10" opcode:"movi" text:"movi r1,10" 
+1 rd:"2" rs:"None" rt:"None" imm:"8" opcode:"movi" text:"movi r2,8" 
+2 rd:"11" rs:"None" rt:"None" imm:"3" opcode:"movi" text:"movi r11,3" 
+3 rd:"None" rs:"1" rt:"11" imm:"0" opcode:"sw" text:"sw r1,0(r11)" 
+4 rd:"11" rs:"11" rt:"None" imm:"1" opcode:"addi" text:"addi r11,r11,1" 
+5 rd:"1" rs:"1" rt:"None" imm:"3" opcode:"addi" text:"addi r1,r1,3" 
+6 rd:"None" rs:"11" rt:"2" imm:"3" opcode:"blt" text:"blt r11,r2,3" 
+7 rd:"11" rs:"None" rt:"None" imm:"3" opcode:"movi" text:"movi r11,3" 
+8 rd:"4" rs:"11" rt:"None" imm:"1" opcode:"lw" text:"lw r4,1(r11)" 
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|   movi r1,10  ||      NOOP     ||      NOOP     ||      NOOP     ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:1
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|   movi r2,8   ||   movi r1,10  ||      NOOP     ||      NOOP     ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:2
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|   movi r11,3  ||   movi r2,8   ||   movi r1,10  ||      NOOP     ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:3
+rd:"1" rs:"None" rt:"None" imm:"10" opcode:"movi" text:"movi r1,10" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  sw r1,0(r11) ||   movi r11,3  ||   movi r2,8   ||   movi r1,10  ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:4
+rd:"2" rs:"None" rt:"None" imm:"8" opcode:"movi" text:"movi r2,8" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+| addi r11,r11,1||  sw r1,0(r11) ||   movi r11,3  ||   movi r2,8   ||   movi r1,10  |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:5
+rd:"1" rs:"None" rt:"None" imm:"10" opcode:"movi" text:"movi r1,10"  [10, 10, 0]
+rd:"11" rs:"None" rt:"None" imm:"3" opcode:"movi" text:"movi r11,3" 
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+| addi r11,r11,1||  sw r1,0(r11) ||      NOOP     ||   movi r11,3  ||   movi r2,8   |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  10   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:5
+rd:"2" rs:"None" rt:"None" imm:"8" opcode:"movi" text:"movi r2,8"  [8, 8, 0]
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+| addi r11,r11,1||  sw r1,0(r11) ||      NOOP     ||      NOOP     ||   movi r11,3  |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  10   8   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:5
+rd:"11" rs:"None" rt:"None" imm:"3" opcode:"movi" text:"movi r11,3"  [3, 3, 0]
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  addi r1,r1,3 || addi r11,r11,1||  sw r1,0(r11) ||      NOOP     ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  10   8   0   0   0   0   0   0   0   0   3   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:6
+rd:"None" rs:"1" rt:"11" imm:"0" opcode:"sw" text:"sw r1,0(r11)" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  blt r11,r2,3 ||  addi r1,r1,3 || addi r11,r11,1||  sw r1,0(r11) ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  10   8   0   0   0   0   0   0   0   0   3   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:7
+rd:"11" rs:"11" rt:"None" imm:"1" opcode:"addi" text:"addi r11,r11,1" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|   movi r11,3  ||  blt r11,r2,3 ||  addi r1,r1,3 || addi r11,r11,1||  sw r1,0(r11) |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  10   8   0   0   0   0   0   0   0   0   3   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:8
+rd:"None" rs:"1" rt:"11" imm:"0" opcode:"sw" text:"sw r1,0(r11)"  [0, 3, 10]
+rd:"1" rs:"1" rt:"None" imm:"3" opcode:"addi" text:"addi r1,r1,3" 
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|   movi r11,3  ||  blt r11,r2,3 ||      NOOP     ||  addi r1,r1,3 || addi r11,r11,1|
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  10   8   0   0   0   0   0   0   0   0   3   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:8
+rd:"11" rs:"11" rt:"None" imm:"1" opcode:"addi" text:"addi r11,r11,1"  [4, 3, 1]
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  lw r4,1(r11) ||   movi r11,3  ||  blt r11,r2,3 ||      NOOP     ||  addi r1,r1,3 |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  10   8   0   0   0   0   0   0   0   0   4   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:9
+rd:"1" rs:"1" rt:"None" imm:"3" opcode:"addi" text:"addi r1,r1,3"  [13, 10, 3]
+rd:"None" rs:"11" rt:"2" imm:"3" opcode:"blt" text:"blt r11,r2,3" 
+jump tomado
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  sw r1,0(r11) ||      NOOP     ||      NOOP     ||  blt r11,r2,3 ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  13   8   0   0   0   0   0   0   0   0   4   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:4
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+| addi r11,r11,1||  sw r1,0(r11) ||      NOOP     ||      NOOP     ||  blt r11,r2,3 |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  13   8   0   0   0   0   0   0   0   0   4   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:5
+rd:"None" rs:"11" rt:"2" imm:"3" opcode:"blt" text:"blt r11,r2,3"  [0, 4, 8]
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  addi r1,r1,3 || addi r11,r11,1||  sw r1,0(r11) ||      NOOP     ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  13   8   0   0   0   0   0   0   0   0   4   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:6
+rd:"None" rs:"1" rt:"11" imm:"0" opcode:"sw" text:"sw r1,0(r11)" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  blt r11,r2,3 ||  addi r1,r1,3 || addi r11,r11,1||  sw r1,0(r11) ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  13   8   0   0   0   0   0   0   0   0   4   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:7
+rd:"11" rs:"11" rt:"None" imm:"1" opcode:"addi" text:"addi r11,r11,1" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|   movi r11,3  ||  blt r11,r2,3 ||  addi r1,r1,3 || addi r11,r11,1||  sw r1,0(r11) |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  13   8   0   0   0   0   0   0   0   0   4   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:8
+rd:"None" rs:"1" rt:"11" imm:"0" opcode:"sw" text:"sw r1,0(r11)"  [0, 4, 13]
+rd:"1" rs:"1" rt:"None" imm:"3" opcode:"addi" text:"addi r1,r1,3" 
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|   movi r11,3  ||  blt r11,r2,3 ||      NOOP     ||  addi r1,r1,3 || addi r11,r11,1|
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  13   8   0   0   0   0   0   0   0   0   4   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:8
+rd:"11" rs:"11" rt:"None" imm:"1" opcode:"addi" text:"addi r11,r11,1"  [5, 4, 1]
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  lw r4,1(r11) ||   movi r11,3  ||  blt r11,r2,3 ||      NOOP     ||  addi r1,r1,3 |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  13   8   0   0   0   0   0   0   0   0   5   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:9
+rd:"1" rs:"1" rt:"None" imm:"3" opcode:"addi" text:"addi r1,r1,3"  [16, 13, 3]
+rd:"None" rs:"11" rt:"2" imm:"3" opcode:"blt" text:"blt r11,r2,3" 
+jump tomado
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  sw r1,0(r11) ||      NOOP     ||      NOOP     ||  blt r11,r2,3 ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  16   8   0   0   0   0   0   0   0   0   5   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:4
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+| addi r11,r11,1||  sw r1,0(r11) ||      NOOP     ||      NOOP     ||  blt r11,r2,3 |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  16   8   0   0   0   0   0   0   0   0   5   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:5
+rd:"None" rs:"11" rt:"2" imm:"3" opcode:"blt" text:"blt r11,r2,3"  [0, 5, 8]
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  addi r1,r1,3 || addi r11,r11,1||  sw r1,0(r11) ||      NOOP     ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  16   8   0   0   0   0   0   0   0   0   5   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:6
+rd:"None" rs:"1" rt:"11" imm:"0" opcode:"sw" text:"sw r1,0(r11)" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  blt r11,r2,3 ||  addi r1,r1,3 || addi r11,r11,1||  sw r1,0(r11) ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  16   8   0   0   0   0   0   0   0   0   5   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:7
+rd:"11" rs:"11" rt:"None" imm:"1" opcode:"addi" text:"addi r11,r11,1" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|   movi r11,3  ||  blt r11,r2,3 ||  addi r1,r1,3 || addi r11,r11,1||  sw r1,0(r11) |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  16   8   0   0   0   0   0   0   0   0   5   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:8
+rd:"None" rs:"1" rt:"11" imm:"0" opcode:"sw" text:"sw r1,0(r11)"  [0, 5, 16]
+rd:"1" rs:"1" rt:"None" imm:"3" opcode:"addi" text:"addi r1,r1,3" 
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|   movi r11,3  ||  blt r11,r2,3 ||      NOOP     ||  addi r1,r1,3 || addi r11,r11,1|
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  16   8   0   0   0   0   0   0   0   0   5   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:8
+rd:"11" rs:"11" rt:"None" imm:"1" opcode:"addi" text:"addi r11,r11,1"  [6, 5, 1]
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  lw r4,1(r11) ||   movi r11,3  ||  blt r11,r2,3 ||      NOOP     ||  addi r1,r1,3 |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  16   8   0   0   0   0   0   0   0   0   6   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:9
+rd:"1" rs:"1" rt:"None" imm:"3" opcode:"addi" text:"addi r1,r1,3"  [19, 16, 3]
+rd:"None" rs:"11" rt:"2" imm:"3" opcode:"blt" text:"blt r11,r2,3" 
+jump tomado
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  sw r1,0(r11) ||      NOOP     ||      NOOP     ||  blt r11,r2,3 ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  19   8   0   0   0   0   0   0   0   0   6   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:4
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+| addi r11,r11,1||  sw r1,0(r11) ||      NOOP     ||      NOOP     ||  blt r11,r2,3 |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  19   8   0   0   0   0   0   0   0   0   6   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:5
+rd:"None" rs:"11" rt:"2" imm:"3" opcode:"blt" text:"blt r11,r2,3"  [0, 6, 8]
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  addi r1,r1,3 || addi r11,r11,1||  sw r1,0(r11) ||      NOOP     ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  19   8   0   0   0   0   0   0   0   0   6   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:6
+rd:"None" rs:"1" rt:"11" imm:"0" opcode:"sw" text:"sw r1,0(r11)" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  blt r11,r2,3 ||  addi r1,r1,3 || addi r11,r11,1||  sw r1,0(r11) ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  19   8   0   0   0   0   0   0   0   0   6   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:7
+rd:"11" rs:"11" rt:"None" imm:"1" opcode:"addi" text:"addi r11,r11,1" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|   movi r11,3  ||  blt r11,r2,3 ||  addi r1,r1,3 || addi r11,r11,1||  sw r1,0(r11) |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  19   8   0   0   0   0   0   0   0   0   6   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:8
+rd:"None" rs:"1" rt:"11" imm:"0" opcode:"sw" text:"sw r1,0(r11)"  [0, 6, 19]
+rd:"1" rs:"1" rt:"None" imm:"3" opcode:"addi" text:"addi r1,r1,3" 
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|   movi r11,3  ||  blt r11,r2,3 ||      NOOP     ||  addi r1,r1,3 || addi r11,r11,1|
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  19   8   0   0   0   0   0   0   0   0   6   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:8
+rd:"11" rs:"11" rt:"None" imm:"1" opcode:"addi" text:"addi r11,r11,1"  [7, 6, 1]
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  lw r4,1(r11) ||   movi r11,3  ||  blt r11,r2,3 ||      NOOP     ||  addi r1,r1,3 |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  19   8   0   0   0   0   0   0   0   0   7   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:9
+rd:"1" rs:"1" rt:"None" imm:"3" opcode:"addi" text:"addi r1,r1,3"  [22, 19, 3]
+rd:"None" rs:"11" rt:"2" imm:"3" opcode:"blt" text:"blt r11,r2,3" 
+jump tomado
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  sw r1,0(r11) ||      NOOP     ||      NOOP     ||  blt r11,r2,3 ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  22   8   0   0   0   0   0   0   0   0   7   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:4
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+| addi r11,r11,1||  sw r1,0(r11) ||      NOOP     ||      NOOP     ||  blt r11,r2,3 |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  22   8   0   0   0   0   0   0   0   0   7   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:5
+rd:"None" rs:"11" rt:"2" imm:"3" opcode:"blt" text:"blt r11,r2,3"  [0, 7, 8]
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  addi r1,r1,3 || addi r11,r11,1||  sw r1,0(r11) ||      NOOP     ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  22   8   0   0   0   0   0   0   0   0   7   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:6
+rd:"None" rs:"1" rt:"11" imm:"0" opcode:"sw" text:"sw r1,0(r11)" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  blt r11,r2,3 ||  addi r1,r1,3 || addi r11,r11,1||  sw r1,0(r11) ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  22   8   0   0   0   0   0   0   0   0   7   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:7
+rd:"11" rs:"11" rt:"None" imm:"1" opcode:"addi" text:"addi r11,r11,1" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|   movi r11,3  ||  blt r11,r2,3 ||  addi r1,r1,3 || addi r11,r11,1||  sw r1,0(r11) |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  22   8   0   0   0   0   0   0   0   0   7   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 19, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:8
+rd:"None" rs:"1" rt:"11" imm:"0" opcode:"sw" text:"sw r1,0(r11)"  [0, 7, 22]
+rd:"1" rs:"1" rt:"None" imm:"3" opcode:"addi" text:"addi r1,r1,3" 
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|   movi r11,3  ||  blt r11,r2,3 ||      NOOP     ||  addi r1,r1,3 || addi r11,r11,1|
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  22   8   0   0   0   0   0   0   0   0   7   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 19, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:8
+rd:"11" rs:"11" rt:"None" imm:"1" opcode:"addi" text:"addi r11,r11,1"  [8, 7, 1]
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+busca_inst
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|  lw r4,1(r11) ||   movi r11,3  ||  blt r11,r2,3 ||      NOOP     ||  addi r1,r1,3 |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  22   8   0   0   0   0   0   0   0   0   8   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 19, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:9
+rd:"1" rs:"1" rt:"None" imm:"3" opcode:"addi" text:"addi r1,r1,3"  [25, 22, 3]
+rd:"None" rs:"11" rt:"2" imm:"3" opcode:"blt" text:"blt r11,r2,3" 
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|      NOOP     ||  lw r4,1(r11) ||   movi r11,3  ||  blt r11,r2,3 ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  25   8   0   0   0   0   0   0   0   0   8   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 19, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:9
+rd:"11" rs:"None" rt:"None" imm:"3" opcode:"movi" text:"movi r11,3" 
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|      NOOP     ||  lw r4,1(r11) ||      NOOP     ||   movi r11,3  ||  blt r11,r2,3 |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  25   8   0   0   0   0   0   0   0   0   8   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 19, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:9
+rd:"None" rs:"11" rt:"2" imm:"3" opcode:"blt" text:"blt r11,r2,3"  [0, 8, 8]
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|      NOOP     ||  lw r4,1(r11) ||      NOOP     ||      NOOP     ||   movi r11,3  |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  25   8   0   0   0   0   0   0   0   0   8   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 19, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:9
+rd:"11" rs:"None" rt:"None" imm:"3" opcode:"movi" text:"movi r11,3"  [3, 3, 0]
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|      NOOP     ||      NOOP     ||  lw r4,1(r11) ||      NOOP     ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  25   8   0   0   0   0   0   0   0   0   3   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 19, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:9
+rd:"4" rs:"11" rt:"None" imm:"1" opcode:"lw" text:"lw r4,1(r11)" 
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|      NOOP     ||      NOOP     ||      NOOP     ||  lw r4,1(r11) ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  25   8   0   0   0   0   0   0   0   0   3   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 19, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:9
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|      NOOP     ||      NOOP     ||      NOOP     ||      NOOP     ||  lw r4,1(r11) |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  25   8   0   0   0   0   0   0   0   0   3   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 19, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:9
+rd:"4" rs:"11" rt:"None" imm:"1" opcode:"lw" text:"lw r4,1(r11)"  [13, 4, 3]
+rd:"None" rs:"None" rt:"None" imm:"None" opcode:"None" text:"NOOP" 
+
+|-----Busca-----||---Decodifica--||---Executa-----||---Memoria-----||----Regist-----|
+|      NOOP     ||      NOOP     ||      NOOP     ||      NOOP     ||      NOOP     |
+Registradores:
+  R0  R1  R2  R3  R4  R5  R6  R7  R8  R9 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31
+   0  25   8   0  13   0   0   0   0   0   0   3   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+
+Memoria:[0, 0, 0, 10, 13, 16, 19, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+PC:9

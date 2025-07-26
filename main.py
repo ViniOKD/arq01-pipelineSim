@@ -35,8 +35,8 @@ operacoes = {
     "add": lambda x, y: x + y,
     "sub": lambda x, y: x - y,
     "mul": lambda x, y: x * y,
-    "div": lambda x, y: x // y,
-    "mod": lambda x, y: x % y,
+    "div": lambda x, y: x // y if y != 0 else 0,
+    "mod": lambda x, y: x % y if y != 0 else 0,
 }
 
 def buscaInstrucao():
@@ -186,34 +186,52 @@ def escreveReg(resultado):
     cpu["registradores"][resultado[1]] = resultado[2]
     return resultado
 
+
 def getDestino(instrucao):
-    ''' Retorna o registrador destino de uma instrução.
-    '''
-    if instrucao != "-":
-        return instrucao[1]
-
-def getFonte(instrucao):
-    ''' Retorna os registradores fonte de uma instrução.
-    '''
-
     if instrucao == "-":
-        return []
+        return None
+    
     operacao = instrucao[0]
     
-    if operacao in operacoes:
-        return [int(instrucao[2][1:]), int(instrucao[3][1:])]
-    elif operacao in ["addi", "subi"]:
-        return [int(instrucao[2][1:])]
-    elif operacao == "lw":
-        return [int(instrucao[1][1:]), int(instrucao[3][1:])]  
-    elif operacao == "sw":
-        return [int(instrucao[1][1:]), int(instrucao[3][1:])]
-    elif operacao == "mov":
-        return [int(instrucao[2][1:])]
-    elif operacao in ["beq","blt","bgt","j"]:
-        return [int(instrucao[1][1:]), int(instrucao[2][1:])]
+    # Instruções que não escrevem em registradores
+    if operacao in ["sw", "beq", "blt", "bgt", "j"]:
+        return None
+    
+    # Verificar tipo do segundo elemento
+    destino = instrucao[1]
+    
+    if isinstance(destino, str):
+        # Formato "r1" → extrair número
+        return int(destino[1:])
+    elif isinstance(destino, int):
+        # Já é número do registrador
+        return destino
     else:
+        return None
+def getFonte(instrucao):
+    if instrucao == "-":
         return []
+    
+    op = instrucao[0]
+    
+    # 2 registradores fonte
+    if op in ["add", "sub", "mul", "div", "mod"]:
+        return [int(instrucao[2][1:]), int(instrucao[3][1:])]
+    
+    # 1 registrador fonte    
+    elif op in ["addi", "subi", "mov"]:
+        return [int(instrucao[2][1:])]
+    
+    # Casos especiais
+    elif op == "lw":
+        return [int(instrucao[3][1:])]  # só o registrador base
+    elif op == "sw": 
+        return [int(instrucao[1][1:]), int(instrucao[3][1:])]
+    elif op in ["beq", "blt", "bgt"]:
+        return [int(instrucao[1][1:]), int(instrucao[2][1:])]
+    
+    # Sem fontes: movi, j
+    return []
 
 def hazard():
     ''' Verifica se há hazard de dados no pipeline.
@@ -230,7 +248,7 @@ def avancarPipeline():
     pipeline[4] = pipeline[3]
     pipeline[3] = (pipeline[2][0], acessaMem(pipeline[2][1]))
     if hazard():
-        print("hazard - stall implementado")
+        print("Hazard de dados - Inserindo stall")
         pipeline[2] = ("-", "-")
         return
     else:
@@ -239,8 +257,12 @@ def avancarPipeline():
         pipeline[0] = buscaInstrucao()
 
 def initialise():
-    with open(arquivo, "rt") as arq:
-        return [linha.strip() for linha in arq]
+    try:
+        with open(arquivo, "rt") as arq:
+            instrucoes = [linha.strip() for linha in arq]
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Arquivo de instruções '{arquivo}' não encontrado.")
+    return instrucoes
 
 def imprimePipeline(pipeline):
     cabecalho = ["Busca", "Decodifica", "Executa", "Memoria", "Regist"]
